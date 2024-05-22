@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дашборд с эффектом "Матрицы"</title>
+  <style>
+    body {
+      margin: 0;
+      background: url('./snapedit_1716301780269 1.svg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const katakana = 'ЯТЕБЯЛЮБЛЮ';
+    const latin = 'ЯТЕБЯЛЮБЛЮФЛЛОЧКА';
+    const nums = 'ТЫСУПЕРУМНИЦА';
+    const alphabet = katakana + latin + nums;
+
+    const fontSize = Math.max(12, window.innerWidth / 50);
+    const columns = Math.floor(canvas.width / fontSize);
+    const rainDrops = Array(columns).fill(1);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#0F0';
+      ctx.font = `${fontSize}px monospace`;
+
+      rainDrops.forEach((y, index) => {
+        const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+        const x = index * fontSize;
+        ctx.fillText(text, x, y * fontSize);
+
+        if (y * fontSize > canvas.height && Math.random() > 0.975) {
+          rainDrops[index] = 0;
+        }
+        rainDrops[index]++;
+      });
+    }
+
+    setInterval(draw, 50); // Увеличена частота обновления для более плавной анимации
+
+    setTimeout(function() {
+      location.reload();
+    }, 10000);
+  </script>
+</body>
+</html>
